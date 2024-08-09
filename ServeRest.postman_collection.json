@@ -10,108 +10,356 @@
 			"name": "Usuário",
 			"item": [
 				{
-					"name": "Cadastro com sucesso",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"nome\": \"Leonardo\",\r\n  \"email\": \"testeQA@qa.com.br\",\r\n  \"password\": \"teste\",\r\n  \"administrador\": \"true\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+					"name": "POST",
+					"item": [
+						{
+							"name": "Cadastro com sucesso",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"// selecione aleatoriamente nome e adicione à variável de amebiente\r",
+											"pm.environment.set(\"nome\", pm.variables.replaceIn('{{$randomFullName}}'));\r",
+											"// selecione aleatoriamente email e adicione à variável de ambiente\r",
+											"pm.environment.set(\"email\", pm.variables.replaceIn('{{$randomEmail}}'));\r",
+											"// selecione aleatoriamente senha e adicione à variável password\r",
+											"pm.environment.set(\"password\", pm.variables.replaceIn('{{$randomPassword}}'));\r",
+											"// selecione aleatoriamente um valor booleano e adicione à variável administrador\r",
+											"pm.environment.set(\"administrador\", pm.variables.replaceIn('{{$randomBoolean}}'));"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
 								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/usuarios",
-							"host": [
-								"{{base_url}}"
 							],
-							"path": [
-								"usuarios"
-							]
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nome\": \"{{nome}}\",\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"{{password}}\",\r\n  \"administrador\": \"{{administrador}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/usuarios",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"usuarios"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Nome em branco",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nome\": \"\",\r\n  \"email\": \"testenome@qa.com.br\",\r\n  \"password\": \"nomeembranco\",\r\n  \"administrador\": \"true\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/usuarios",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"usuarios"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Email ja existente",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nome\": \"Leonardo\",\r\n  \"email\": \"testeQA@qa.com.br\",\r\n  \"password\": \"emailjaexistente\",\r\n  \"administrador\": \"true\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/usuarios",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"usuarios"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Administrador invalido",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nome\": \"Leonardo\",\r\n  \"email\": \"testeadministrador@qa.com.br\",\r\n  \"password\": \"administrador\",\r\n  \"administrador\": \"valorinvalido\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/usuarios",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"usuarios"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "Nome em branco",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"nome\": \"\",\r\n  \"email\": \"testenome@qa.com.br\",\r\n  \"password\": \"nomeembranco\",\r\n  \"administrador\": \"true\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+					"name": "GET",
+					"item": [
+						{
+							"name": "Listar todos usuários",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/usuarios",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"usuarios"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{base_url}}/usuarios",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"usuarios"
-							]
+						{
+							"name": "Listar usuário por id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/usuarios/0uxuPY0cbmQhpEz1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"usuarios",
+										"0uxuPY0cbmQhpEz1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Tentar listar usuário por id inexistente",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/usuarios/idInexistente",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"usuarios",
+										"idInexistente"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "Email ja existente",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"nome\": \"Leonardo\",\r\n  \"email\": \"testeQA@qa.com.br\",\r\n  \"password\": \"emailjaexistente\",\r\n  \"administrador\": \"true\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+					"name": "PUT",
+					"item": [
+						{
+							"name": "Editar usuário com sucesso",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nome\": \"Fulano editado\",\r\n  \"email\": \"editado@qa.com.br\",\r\n  \"password\": \"editar\",\r\n  \"administrador\": \"true\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/usuarios/0uxuPY0cbmQhpEz1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"usuarios",
+										"0uxuPY0cbmQhpEz1"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{base_url}}/usuarios",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"usuarios"
-							]
+						{
+							"name": "Cadastrar usuário com sucesso pelo editar",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nome\": \"Fulano da Silva\",\r\n  \"email\": \"beltrano@qa.com.br\",\r\n  \"password\": \"teste\",\r\n  \"administrador\": \"true\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/usuarios/idInexistente",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"usuarios",
+										"idInexistente"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Tentar editar com email ja existente",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nome\": \"Fulano da Silva\",\r\n  \"email\": \"beltrano@qa.com.br\",\r\n  \"password\": \"teste\",\r\n  \"administrador\": \"true\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/usuarios/0uxuPY0cbmQhpEz1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"usuarios",
+										"0uxuPY0cbmQhpEz1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Tentar editar com campo nome em branco",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nome\": \"\",\r\n  \"email\": \"beltrano@qa.com.br\",\r\n  \"password\": \"teste\",\r\n  \"administrador\": \"true\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/usuarios/0uxuPY0cbmQhpEz1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"usuarios",
+										"0uxuPY0cbmQhpEz1"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "Administrador invalido",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"nome\": \"Leonardo\",\r\n  \"email\": \"testeadministrador@qa.com.br\",\r\n  \"password\": \"administrador\",\r\n  \"administrador\": \"valorinvalido\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+					"name": "DELETE",
+					"item": [
+						{
+							"name": "Deletar usuário com sucesso",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/usuarios/kYep7qdiC1ZfLy9G",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"usuarios",
+										"kYep7qdiC1ZfLy9G"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{base_url}}/usuarios",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"usuarios"
-							]
+						{
+							"name": "Tentar deletar usuário com id inexistente",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/usuarios/idInexistente",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"usuarios",
+										"idInexistente"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				}
 			]
 		},
@@ -119,184 +367,526 @@
 			"name": "Produto",
 			"item": [
 				{
-					"name": "Cadastro com sucesso",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RlQHFhLmNvbS5iciIsInBhc3N3b3JkIjoidGVzdGUxIiwiaWF0IjoxNzIzMDE0NDA1LCJleHAiOjE3MjMwMTUwMDV9.Fw3C7xwHhP9TtIP5B1GCt23mkhnszFnZB2k0O719N3E",
-									"type": "string"
+					"name": "GET",
+					"item": [
+						{
+							"name": "Listar todos produtos com sucesso",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/produtos",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"produtos"
+									]
 								}
-							]
+							},
+							"response": []
 						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"nome\": \"Teste\",\r\n  \"preco\": 100,\r\n  \"descricao\": \"Teste QA\",\r\n  \"quantidade\": 2\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+						{
+							"name": "Listar produto por ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/produtos/BeeJh5lz3k6kSIzA",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"produtos",
+										"BeeJh5lz3k6kSIzA"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{base_url}}/produtos",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"produtos"
-							]
+						{
+							"name": "Tentar listar produto com id invalido",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/produtos/idInvalido",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"produtos",
+										"idInvalido"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "Preço menor que 0",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RlQHFhLmNvbS5iciIsInBhc3N3b3JkIjoidGVzdGUxIiwiaWF0IjoxNzIzMDE0NDA1LCJleHAiOjE3MjMwMTUwMDV9.Fw3C7xwHhP9TtIP5B1GCt23mkhnszFnZB2k0O719N3E",
-									"type": "string"
+					"name": "POST",
+					"item": [
+						{
+							"name": "Cadastro com sucesso",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVkaXRhZG9AcWEuY29tLmJyIiwicGFzc3dvcmQiOiJlZGl0YXIiLCJpYXQiOjE3MjMxODM2OTQsImV4cCI6MTcyMzE4NDI5NH0.LMB_u1d5Hxcb0Pp1jra39KLA_g0o0ycYvxixDJOHz-8",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nome\": \"Teste1\",\r\n  \"preco\": 100,\r\n  \"descricao\": \"Teste QA\",\r\n  \"quantidade\": 2\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/produtos",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"produtos"
+									]
 								}
-							]
+							},
+							"response": []
 						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"nome\": \"Preco menor que 1\",\r\n  \"preco\": -1,\r\n  \"descricao\": \"Teste QA\",\r\n  \"quantidade\": 2\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+						{
+							"name": "Preço menor que 0",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RlQHFhLmNvbS5iciIsInBhc3N3b3JkIjoidGVzdGUxIiwiaWF0IjoxNzIzMDE0NDA1LCJleHAiOjE3MjMwMTUwMDV9.Fw3C7xwHhP9TtIP5B1GCt23mkhnszFnZB2k0O719N3E",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nome\": \"Preco menor que 1\",\r\n  \"preco\": -1,\r\n  \"descricao\": \"Teste QA\",\r\n  \"quantidade\": 2\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/produtos",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"produtos"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{base_url}}/produtos",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"produtos"
-							]
+						{
+							"name": "Quantidade menor que 0",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RlQHFhLmNvbS5iciIsInBhc3N3b3JkIjoidGVzdGUxIiwiaWF0IjoxNzIzMDE0NDA1LCJleHAiOjE3MjMwMTUwMDV9.Fw3C7xwHhP9TtIP5B1GCt23mkhnszFnZB2k0O719N3E",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nome\": \"Quantidade menor que 1\",\r\n  \"preco\": 100,\r\n  \"descricao\": \"Teste QA\",\r\n  \"quantidade\": -1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/produtos",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"produtos"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Descricao em branco",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RlQHFhLmNvbS5iciIsInBhc3N3b3JkIjoidGVzdGUxIiwiaWF0IjoxNzIzMDE0NDA1LCJleHAiOjE3MjMwMTUwMDV9.Fw3C7xwHhP9TtIP5B1GCt23mkhnszFnZB2k0O719N3E",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nome\": \"descricao em branco\",\r\n  \"preco\": 100,\r\n  \"descricao\": \"\",\r\n  \"quantidade\": 2\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/produtos",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"produtos"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Nome ja existente",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RlQHFhLmNvbS5iciIsInBhc3N3b3JkIjoidGVzdGUxIiwiaWF0IjoxNzIzMDE0NDA1LCJleHAiOjE3MjMwMTUwMDV9.Fw3C7xwHhP9TtIP5B1GCt23mkhnszFnZB2k0O719N3E",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nome\": \"Teste\",\r\n  \"preco\": 100,\r\n  \"descricao\": \"Teste QA\",\r\n  \"quantidade\": 2\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/produtos",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"produtos"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "Quantidade menor que 0",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RlQHFhLmNvbS5iciIsInBhc3N3b3JkIjoidGVzdGUxIiwiaWF0IjoxNzIzMDE0NDA1LCJleHAiOjE3MjMwMTUwMDV9.Fw3C7xwHhP9TtIP5B1GCt23mkhnszFnZB2k0O719N3E",
-									"type": "string"
+					"name": "PUT",
+					"item": [
+						{
+							"name": "Editar produto com sucesso",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVkaXRhZG9AcWEuY29tLmJyIiwicGFzc3dvcmQiOiJlZGl0YXIiLCJpYXQiOjE3MjMxODMyOTYsImV4cCI6MTcyMzE4Mzg5Nn0.or6XMoogsRGS_C5CTfd9S7PJANYJ6IluSFWZ3CCdAcU",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nome\": \"Logitech Mouse Gamer\",\r\n  \"preco\": 40,\r\n  \"descricao\": \"Mouse\",\r\n  \"quantidade\": 31\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/produtos/BeeJh5lz3k6kSIzA",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"produtos",
+										"BeeJh5lz3k6kSIzA"
+									]
 								}
-							]
+							},
+							"response": []
 						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"nome\": \"Quantidade menor que 1\",\r\n  \"preco\": 100,\r\n  \"descricao\": \"Teste QA\",\r\n  \"quantidade\": -1\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+						{
+							"name": "Cadastrar produto pelo put",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVkaXRhZG9AcWEuY29tLmJyIiwicGFzc3dvcmQiOiJlZGl0YXIiLCJpYXQiOjE3MjMxODMyOTYsImV4cCI6MTcyMzE4Mzg5Nn0.or6XMoogsRGS_C5CTfd9S7PJANYJ6IluSFWZ3CCdAcU",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nome\": \"Logitech Mouse Gamer 3\",\r\n  \"preco\": 45,\r\n  \"descricao\": \"Mouse\",\r\n  \"quantidade\": 51\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/produtos/idInexistente",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"produtos",
+										"idInexistente"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{base_url}}/produtos",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"produtos"
-							]
+						{
+							"name": "Tentar editar produto com nome existente",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVkaXRhZG9AcWEuY29tLmJyIiwicGFzc3dvcmQiOiJlZGl0YXIiLCJpYXQiOjE3MjMxODMyOTYsImV4cCI6MTcyMzE4Mzg5Nn0.or6XMoogsRGS_C5CTfd9S7PJANYJ6IluSFWZ3CCdAcU",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nome\": \"Logitech Mouse Gamer 2\",\r\n  \"preco\": 40,\r\n  \"descricao\": \"Mouse\",\r\n  \"quantidade\": 31\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/produtos/BeeJh5lz3k6kSIzA",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"produtos",
+										"BeeJh5lz3k6kSIzA"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Tentar editar produto com nome em branco",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVkaXRhZG9AcWEuY29tLmJyIiwicGFzc3dvcmQiOiJlZGl0YXIiLCJpYXQiOjE3MjMxODMyOTYsImV4cCI6MTcyMzE4Mzg5Nn0.or6XMoogsRGS_C5CTfd9S7PJANYJ6IluSFWZ3CCdAcU",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nome\": \"\",\r\n  \"preco\": 40,\r\n  \"descricao\": \"Mouse\",\r\n  \"quantidade\": 31\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/produtos/BeeJh5lz3k6kSIzA",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"produtos",
+										"BeeJh5lz3k6kSIzA"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Tentar editar produto com quantidade negativa",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVkaXRhZG9AcWEuY29tLmJyIiwicGFzc3dvcmQiOiJlZGl0YXIiLCJpYXQiOjE3MjMxODMyOTYsImV4cCI6MTcyMzE4Mzg5Nn0.or6XMoogsRGS_C5CTfd9S7PJANYJ6IluSFWZ3CCdAcU",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nome\": \"the best mouse\",\r\n  \"preco\": 40,\r\n  \"descricao\": \"Mouse\",\r\n  \"quantidade\": -1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/produtos/BeeJh5lz3k6kSIzA",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"produtos",
+										"BeeJh5lz3k6kSIzA"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "Descricao em branco",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RlQHFhLmNvbS5iciIsInBhc3N3b3JkIjoidGVzdGUxIiwiaWF0IjoxNzIzMDE0NDA1LCJleHAiOjE3MjMwMTUwMDV9.Fw3C7xwHhP9TtIP5B1GCt23mkhnszFnZB2k0O719N3E",
-									"type": "string"
+					"name": "DELETE",
+					"item": [
+						{
+							"name": "Tentar excluir produto do carrinho",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVkaXRhZG9AcWEuY29tLmJyIiwicGFzc3dvcmQiOiJlZGl0YXIiLCJpYXQiOjE3MjMxODM2OTQsImV4cCI6MTcyMzE4NDI5NH0.LMB_u1d5Hxcb0Pp1jra39KLA_g0o0ycYvxixDJOHz-8",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/produtos/K6leHdftCeOJj8BJ",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"produtos",
+										"K6leHdftCeOJj8BJ"
+									]
 								}
-							]
+							},
+							"response": []
 						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"nome\": \"descricao em branco\",\r\n  \"preco\": 100,\r\n  \"descricao\": \"\",\r\n  \"quantidade\": 2\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+						{
+							"name": "Excluir produto com sucesso",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVkaXRhZG9AcWEuY29tLmJyIiwicGFzc3dvcmQiOiJlZGl0YXIiLCJpYXQiOjE3MjMxODM2OTQsImV4cCI6MTcyMzE4NDI5NH0.LMB_u1d5Hxcb0Pp1jra39KLA_g0o0ycYvxixDJOHz-8",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/produtos/pzwWu97pznCLQY5w",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"produtos",
+										"pzwWu97pznCLQY5w"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{base_url}}/produtos",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"produtos"
-							]
+						{
+							"name": "Tentar excluir produto com id inexistente",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVkaXRhZG9AcWEuY29tLmJyIiwicGFzc3dvcmQiOiJlZGl0YXIiLCJpYXQiOjE3MjMxODM2OTQsImV4cCI6MTcyMzE4NDI5NH0.LMB_u1d5Hxcb0Pp1jra39KLA_g0o0ycYvxixDJOHz-8",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/produtos/idInexistente",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"produtos",
+										"idInexistente"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
-				},
-				{
-					"name": "Nome ja existente",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RlQHFhLmNvbS5iciIsInBhc3N3b3JkIjoidGVzdGUxIiwiaWF0IjoxNzIzMDE0NDA1LCJleHAiOjE3MjMwMTUwMDV9.Fw3C7xwHhP9TtIP5B1GCt23mkhnszFnZB2k0O719N3E",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"nome\": \"Teste\",\r\n  \"preco\": 100,\r\n  \"descricao\": \"Teste QA\",\r\n  \"quantidade\": 2\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/produtos",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"produtos"
-							]
-						}
-					},
-					"response": []
+					]
 				}
 			]
 		},
@@ -310,7 +900,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"email\": \"teste@qa.com.br\",\r\n  \"password\": \"teste1\"\r\n}",
+							"raw": "{\r\n  \"email\": \"editado@qa.com.br\",\r\n  \"password\": \"teste1\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
