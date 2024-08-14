@@ -1,5 +1,7 @@
 package com.vemser.rest.tests.produtos;
 
+import com.vemser.rest.model.login.LoginPOJO;
+import com.vemser.rest.model.produtos.ProdutoPOJO;
 import com.vemser.rest.model.usuario.UsuariosPOJO;
 import io.restassured.http.ContentType;
 import net.datafaker.Faker;
@@ -15,49 +17,55 @@ public class ProdutosTest {
 
     Faker faker = new Faker(new Locale("PT-BR"));
     Random geradorBoolean = new Random();
+    String token;
 
     @BeforeEach
     public void setUp() {
         baseURI = "http://localhost:3000";
     }
 
+    private String obterToken() {
+        LoginPOJO login = new LoginPOJO();
+        login.setEmail("Gillian76@gmail.com");
+        login.setPassword("O48wXF_s7IZyD5F");
+
+        token =
+                given()
+                        .log().all()
+                        .contentType(ContentType.JSON)
+                        .body(login)
+                        .when()
+                        .post("/login")
+                        .then()
+                        .log().all()
+                        .statusCode(200)
+                        .extract()
+                        .path("authorization");
+
+        return token;
+    }
+
     @Test
-    public void testListarTodosUsuariosComSucesso() {
+    public void testListarTodosProdutosComSucesso() {
 
         given()
                 .when()
-                .get("/usuarios")
+                .get("/produtos")
                 .then()
                 .statusCode(200)
         ;
     }
 
     @Test
-    public void testListarUsuariosPorNomeComSucesso() {
+    public void testListarProdutoPorIdComSucesso() {
 
-        String nome = "Luiz Henrique Peres";
-
-        given()
-                .log().all()
-                .queryParam("nome", nome)
-                .when()
-                .get("/usuarios")
-                .then()
-                .log().all()
-                .statusCode(200)
-        ;
-    }
-
-    @Test
-    public void testBuscarUsuarioPorIDComSucesso() {
-
-        String id = "dEV1fk1klY3pl28P";
+        String id = "BeeJh5lz3k6kSIzA";
 
         given()
                 .log().all()
                 .pathParam("id", id)
                 .when()
-                .get("/usuarios/{id}")
+                .get("/produtos/{id}")
                 .then()
                 .log().all()
                 .statusCode(200)
@@ -65,21 +73,37 @@ public class ProdutosTest {
     }
 
     @Test
-    public void testCadastrarUsuarioComSucesso() {
+    public void testListarProdutoPorIdInvalido() {
 
-        // massa de teste - body - payload
-        UsuariosPOJO usuario = new UsuariosPOJO();
-        usuario.setNome(faker.name().firstName() + " " + faker.name().lastName());
-        usuario.setEmail(faker.internet().emailAddress());
-        usuario.setPassword(faker.internet().password());
-        usuario.setAdministrador(String.valueOf(geradorBoolean.nextBoolean()));
+        String id = "invalido";
+
+        given()
+                .log().all()
+                .pathParam("id", id)
+                .when()
+                .get("/produtos/{id}")
+                .then()
+                .log().all()
+                .statusCode(400)
+        ;
+    }
+
+    @Test
+    public void testCadastrarProdutoComSucesso() {
+
+        ProdutoPOJO produto = new ProdutoPOJO();
+        produto.setNome(faker.commerce().productName());
+        produto.setPreco(faker.number().numberBetween(1, 10000));
+        produto.setDescricao(faker.commerce().material());
+        produto.setQuantidade(faker.number().numberBetween(1, 10000));
 
         given()
                 .log().all()
                 .contentType(ContentType.JSON)
-                .body(usuario)
+                .header("Authorization", obterToken())
+                .body(produto)
                 .when()
-                .post("/usuarios")
+                .post("/produtos")
                 .then()
                 .log().all()
                 .statusCode(201)
@@ -87,24 +111,68 @@ public class ProdutosTest {
     }
 
     @Test
-    public void testAtualizarUsuariosComSucesso() {
+    public void testCadastrarProdutoComNomeJaUtilizado() {
 
-        String id = "dEV1fk1klY3pl28P";
-
-        // massa de teste - body - payload
-        UsuariosPOJO usuario = new UsuariosPOJO();
-        usuario.setNome(faker.name().firstName() + " " + faker.name().lastName());
-        usuario.setEmail(faker.internet().emailAddress());
-        usuario.setPassword(faker.internet().password());
-        usuario.setAdministrador(String.valueOf(geradorBoolean.nextBoolean()));
+        ProdutoPOJO produto = new ProdutoPOJO();
+        produto.setNome("Honduras");
+        produto.setPreco(faker.number().numberBetween(1, 10000));
+        produto.setDescricao(faker.commerce().material());
+        produto.setQuantidade(faker.number().numberBetween(1, 10000));
 
         given()
                 .log().all()
                 .contentType(ContentType.JSON)
-                .body(usuario)
+                .header("Authorization", obterToken())
+                .body(produto)
+                .when()
+                .post("/produtos")
+                .then()
+                .log().all()
+                .statusCode(400)
+        ;
+    }
+
+    @Test
+    public void testCadastrarProdutoComNomeEmBranco() {
+
+        ProdutoPOJO produto = new ProdutoPOJO();
+        produto.setNome("");
+        produto.setPreco(faker.number().numberBetween(1, 10000));
+        produto.setDescricao(faker.commerce().material());
+        produto.setQuantidade(faker.number().numberBetween(1, 10000));
+
+        given()
+                .log().all()
+                .contentType(ContentType.JSON)
+                .header("Authorization", obterToken())
+                .body(produto)
+                .when()
+                .post("/produtos")
+                .then()
+                .log().all()
+                .statusCode(400)
+        ;
+    }
+
+    @Test
+    public void testAtualizarProdutosComSucesso() {
+
+        String id = "SUeqfBUFN4q6XXUH";
+
+        ProdutoPOJO produto = new ProdutoPOJO();
+        produto.setNome(faker.commerce().productName());
+        produto.setPreco(faker.number().numberBetween(1, 10000));
+        produto.setDescricao(faker.commerce().material());
+        produto.setQuantidade(faker.number().numberBetween(1, 10000));
+
+        given()
+                .log().all()
+                .contentType(ContentType.JSON)
+                .header("Authorization", obterToken())
+                .body(produto)
                 .pathParam("id", id)
                 .when()
-                .put("/usuarios/{id}")
+                .put("/produtos/{id}")
                 .then()
                 .log().all()
                 .statusCode(200)
@@ -112,15 +180,108 @@ public class ProdutosTest {
     }
 
     @Test
-    public void testExcluirUsuarioComSucesso() {
+    public void testAtualizarProdutosComIdInvalidoComSucesso() {
 
-        String id = "dEV1fk1klY3pl28P";
+        String id = "invalido";
+
+        ProdutoPOJO produto = new ProdutoPOJO();
+        produto.setNome(faker.commerce().productName());
+        produto.setPreco(faker.number().numberBetween(1, 10000));
+        produto.setDescricao(faker.commerce().material());
+        produto.setQuantidade(faker.number().numberBetween(1, 10000));
 
         given()
                 .log().all()
+                .contentType(ContentType.JSON)
+                .header("Authorization", obterToken())
+                .body(produto)
                 .pathParam("id", id)
                 .when()
-                .delete("/usuarios/{id}")
+                .put("/produtos/{id}")
+                .then()
+                .log().all()
+                .statusCode(201)
+        ;
+    }
+
+    @Test
+    public void testAtualizarProdutosComNomeJaUtilizado() {
+
+        String id = "SUeqfBUFN4q6XXUH";
+
+        ProdutoPOJO produto = new ProdutoPOJO();
+        produto.setNome("Honduras");
+        produto.setPreco(faker.number().numberBetween(1, 10000));
+        produto.setDescricao(faker.commerce().material());
+        produto.setQuantidade(faker.number().numberBetween(1, 10000));
+
+        given()
+                .log().all()
+                .contentType(ContentType.JSON)
+                .header("Authorization", obterToken())
+                .body(produto)
+                .pathParam("id", id)
+                .when()
+                .put("/produtos/{id}")
+                .then()
+                .log().all()
+                .statusCode(400)
+        ;
+    }
+
+    @Test
+    public void testAtualizarProdutosComNomeEmBranco() {
+
+        String id = "SUeqfBUFN4q6XXUH";
+
+        ProdutoPOJO produto = new ProdutoPOJO();
+        produto.setNome("");
+        produto.setPreco(faker.number().numberBetween(1, 10000));
+        produto.setDescricao(faker.commerce().material());
+        produto.setQuantidade(faker.number().numberBetween(1, 10000));
+
+        given()
+                .log().all()
+                .contentType(ContentType.JSON)
+                .header("Authorization", obterToken())
+                .body(produto)
+                .pathParam("id", id)
+                .when()
+                .put("/produtos/{id}")
+                .then()
+                .log().all()
+                .statusCode(400)
+        ;
+    }
+
+    @Test
+    public void testExcluirProdutosComSucesso() {
+
+        String id = "ARMKsk6r2J0rB7QR";
+
+        given()
+                .log().all()
+                .header("Authorization", obterToken())
+                .pathParam("id", id)
+                .when()
+                .delete("/produtos/{id}")
+                .then()
+                .log().all()
+                .statusCode(200)
+        ;
+    }
+
+    @Test
+    public void testExcluirProdutosComIdInvalido() {
+
+        String id = "invalido";
+
+        given()
+                .log().all()
+                .header("Authorization", obterToken())
+                .pathParam("id", id)
+                .when()
+                .delete("/produtos/{id}")
                 .then()
                 .log().all()
                 .statusCode(200)
