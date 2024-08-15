@@ -1,10 +1,10 @@
 package com.vemser.rest.model.login;
 
-public class LoginPOJO {
+public class Login {
     private String email;
     private String password;
 
-    public LoginPOJO(){
+    public Login(){
 
     }
 

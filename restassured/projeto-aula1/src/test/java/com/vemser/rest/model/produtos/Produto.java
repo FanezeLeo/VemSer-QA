@@ -1,13 +1,13 @@
 package com.vemser.rest.model.produtos;
 
-public class ProdutoPOJO {
+public class Produto {
 
     private String nome;
     private int preco;
     private String descricao;
     private int quantidade;
 
-    public ProdutoPOJO(){
+    public Produto(){
 
     }
 

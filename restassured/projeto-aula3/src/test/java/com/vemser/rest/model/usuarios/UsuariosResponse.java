@@ -1,13 +1,18 @@
-package com.vemser.rest.model.usuario;
+package com.vemser.rest.model.usuarios;
 
-public class UsuariosPOJO {
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class UsuariosResponse {
 
     private String nome;
     private String email;
     private String password;
     private String administrador;
+    @JsonProperty("_id")
+    private String id;
 
-    public UsuariosPOJO(){}
+    public UsuariosResponse() {
+    }
 
     public String getNome() {
         return nome;
@@ -40,4 +45,13 @@ public class UsuariosPOJO {
     public void setAdministrador(String administrador) {
         this.administrador = administrador;
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
 }
