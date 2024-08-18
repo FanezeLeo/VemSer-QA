@@ -26,9 +26,9 @@ public class ProdutosDeleteTest {
                 .log().all()
                 .contentType(ContentType.JSON)
                 .body(login)
-                .when()
+        .when()
                 .post("/login")
-                .then()
+        .then()
                 .log().all()
                 .statusCode(200)
                 .extract()
@@ -45,16 +45,15 @@ public class ProdutosDeleteTest {
                         .log().all()
                         .header("Authorization", obterToken())
                         .pathParam("id", id)
-                        .when()
+                .when()
                         .delete("/produtos/{id}")
-                        .then()
+                .then()
                         .log().all()
                         .statusCode(200)
                         .extract()
                         .as(ProdutoMessageResponse.class)
                 ;
-        Assertions.assertAll("response",
-                ()-> Assertions.assertEquals(response.getMessage(), "Registro excluído com sucesso"));
+        Assertions.assertEquals(response.getMessage(), "Registro excluído com sucesso");
     }
 
     @Test
@@ -67,15 +66,13 @@ public class ProdutosDeleteTest {
                         .log().all()
                         .header("Authorization", obterToken())
                         .pathParam("id", id)
-                        .when()
+                .when()
                         .delete("/produtos/{id}")
-                        .then()
+                .then()
                         .log().all()
                         .statusCode(200)
                         .extract()
-                        .as(ProdutoMessageResponse.class)
-                ;
-        Assertions.assertAll("response",
-                ()-> Assertions.assertEquals(response.getMessage(), "Nenhum registro excluído"));
+                        .as(ProdutoMessageResponse.class);
+        Assertions.assertEquals(response.getMessage(), "Nenhum registro excluído");
     }
 }

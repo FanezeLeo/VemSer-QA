@@ -1,25 +1,20 @@
 package com.vemser.rest.tests.usuarios;
 
-import org.junit.jupiter.api.BeforeEach;
+import com.vemser.rest.client.UsuarioClient;
+import com.vemser.rest.data.factory.UsuariosDataFactory;
 import org.junit.jupiter.api.Test;
 
-import static io.restassured.RestAssured.baseURI;
-import static io.restassured.RestAssured.given;
+
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.Matchers.*;
 
 public class UsuariosGetTest {
-    @BeforeEach
-    public void setUp() {
-        baseURI = "http://localhost:3000";
-    }
+    private final UsuarioClient usuarioClient = new UsuarioClient();
 
     @Test
     public void testListarTodosUsuariosComSucesso() {
 
-        given()
-        .when()
-                .get("/usuarios")
+        usuarioClient.getUsuarios()
         .then()
                 .statusCode(200)
                 .time(lessThan(3000L))
@@ -32,13 +27,9 @@ public class UsuariosGetTest {
     @Test
     public void testListarUsuariosPorNomeComSucesso() {
 
-        String nome = "Dennis Reichel";
+        String nome = UsuariosDataFactory.nomeExistente();
 
-        given()
-                .log().all()
-                .queryParam("nome", nome)
-        .when()
-                .get("/usuarios")
+        usuarioClient.getUsuariosPorNome(nome)
         .then()
                 .log().all()
                 .statusCode(200)
@@ -53,11 +44,7 @@ public class UsuariosGetTest {
 
         String nome = "Nome Invalido";
 
-        given()
-                .log().all()
-                .queryParam("nome", nome)
-        .when()
-                .get("/usuarios")
+        usuarioClient.getUsuariosPorNome(nome)
         .then()
                 .log().all()
                 .statusCode(200)
@@ -70,13 +57,9 @@ public class UsuariosGetTest {
     @Test
     public void testBuscarUsuarioPorIDComSucesso() {
 
-        String id = "ARMKsk6r2J0rB7QR";
+        String id = UsuariosDataFactory.idExistente();
 
-        given()
-                .log().all()
-                .pathParam("id", id)
-        .when()
-                .get("/usuarios/{id}")
+        usuarioClient.getUsuario(id)
         .then()
                 .log().all()
                 .statusCode(200)
@@ -95,11 +78,7 @@ public class UsuariosGetTest {
 
         String id = "invalido";
 
-        given()
-                .log().all()
-                .pathParam("id", id)
-        .when()
-                .get("/usuarios/{id}")
+        usuarioClient.getUsuario(id)
         .then()
                 .log().all()
                 .statusCode(400)

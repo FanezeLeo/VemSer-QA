@@ -23,9 +23,9 @@ public class ProdutosGetTest {
         ProdutoListarProdutos response =
                 given()
                         .log().all()
-                        .when()
+                .when()
                         .get("/produtos")
-                        .then()
+                .then()
                         .log().all()
                         .statusCode(200)
                         .body(matchesJsonSchemaInClasspath("schema/produtos/listar_todos_produtos.json"))
@@ -46,9 +46,9 @@ public class ProdutosGetTest {
                 given()
                         .log().all()
                         .pathParam("id", id)
-                        .when()
+                .when()
                         .get("/produtos/{id}")
-                        .then()
+                .then()
                         .log().all()
                         .statusCode(200)
                         .body(matchesJsonSchemaInClasspath("schema/produtos/listar_produtos_por_id.json"))
@@ -72,17 +72,16 @@ public class ProdutosGetTest {
                 given()
                         .log().all()
                         .pathParam("id", id)
-                        .when()
+                .when()
                         .get("/produtos/{id}")
-                        .then()
+                .then()
                         .log().all()
                         .statusCode(400)
                         .extract()
                         .as(ProdutoMessageResponse.class)
                 ;
 
-        Assertions.assertAll("response",
-                () -> Assertions.assertEquals(response.getMessage(), "Produto não encontrado"));
+        Assertions.assertEquals(response.getMessage(), "Produto não encontrado");
     }
 
 }

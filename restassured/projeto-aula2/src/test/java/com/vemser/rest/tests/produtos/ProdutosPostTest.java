@@ -30,13 +30,14 @@ public class ProdutosPostTest {
         login.setEmail("Gillian76@gmail.com");
         login.setPassword("O48wXF_s7IZyD5F");
 
-        return given()
+        return
+        given()
                 .log().all()
                 .contentType(ContentType.JSON)
                 .body(login)
-                .when()
+        .when()
                 .post("/login")
-                .then()
+        .then()
                 .log().all()
                 .statusCode(200)
                 .extract()
@@ -57,9 +58,9 @@ public class ProdutosPostTest {
                         .contentType(ContentType.JSON)
                         .header("Authorization", obterToken())
                         .body(produto)
-                        .when()
+                .when()
                         .post("/produtos")
-                        .then()
+                .then()
                         .log().all()
                         .statusCode(201)
                         .body(matchesJsonSchemaInClasspath("schema/produtos/cadastrar_produtso.json"))
@@ -86,16 +87,15 @@ public class ProdutosPostTest {
                         .contentType(ContentType.JSON)
                         .header("Authorization", obterToken())
                         .body(produto)
-                        .when()
+                .when()
                         .post("/produtos")
-                        .then()
+                .then()
                         .log().all()
                         .statusCode(400)
                         .extract()
                         .as(ProdutoMessageResponse.class)
                 ;
-        Assertions.assertAll("response",
-                ()-> Assertions.assertEquals(response.getMessage(), "Já existe produto com esse nome"));
+        Assertions.assertEquals(response.getMessage(), "Já existe produto com esse nome");
     }
 
     @Test
@@ -112,9 +112,9 @@ public class ProdutosPostTest {
                 .contentType(ContentType.JSON)
                 .header("Authorization", obterToken())
                 .body(produto)
-                .when()
+        .when()
                 .post("/produtos")
-                .then()
+        .then()
                 .log().all()
                 .statusCode(400)
                 .time(lessThan(3000L))

@@ -30,13 +30,14 @@ public class ProdutosPutTest {
         login.setEmail("Gillian76@gmail.com");
         login.setPassword("O48wXF_s7IZyD5F");
 
-        return given()
+        return
+        given()
                 .log().all()
                 .contentType(ContentType.JSON)
                 .body(login)
-                .when()
+        .when()
                 .post("/login")
-                .then()
+        .then()
                 .log().all()
                 .statusCode(200)
                 .extract()
@@ -61,16 +62,15 @@ public class ProdutosPutTest {
                         .header("Authorization", obterToken())
                         .body(produto)
                         .pathParam("id", id)
-                        .when()
+                .when()
                         .put("/produtos/{id}")
-                        .then()
+                .then()
                         .log().all()
                         .statusCode(200)
                         .extract()
                         .as(ProdutoMessageResponse.class)
                 ;
-        Assertions.assertAll("response",
-                ()-> Assertions.assertEquals(response.getMessage(), "Registro alterado com sucesso"));
+        Assertions.assertEquals(response.getMessage(), "Registro alterado com sucesso");
     }
 
     @Test
@@ -91,9 +91,9 @@ public class ProdutosPutTest {
                         .header("Authorization", obterToken())
                         .body(produto)
                         .pathParam("id", id)
-                        .when()
+                .when()
                         .put("/produtos/{id}")
-                        .then()
+                .then()
                         .log().all()
                         .statusCode(201)
                         .extract()
@@ -122,16 +122,15 @@ public class ProdutosPutTest {
                         .header("Authorization", obterToken())
                         .body(produto)
                         .pathParam("id", id)
-                        .when()
+                .when()
                         .put("/produtos/{id}")
-                        .then()
+                .then()
                         .log().all()
                         .statusCode(400)
                         .extract()
                         .as(ProdutoMessageResponse.class)
                 ;
-        Assertions.assertAll("response",
-                ()-> Assertions.assertEquals(response.getMessage(), "Já existe produto com esse nome"));
+        Assertions.assertEquals(response.getMessage(), "Já existe produto com esse nome");
     }
 
     @Test
@@ -151,9 +150,9 @@ public class ProdutosPutTest {
                 .header("Authorization", obterToken())
                 .body(produto)
                 .pathParam("id", id)
-                .when()
+        .when()
                 .put("/produtos/{id}")
-                .then()
+        .then()
                 .log().all()
                 .statusCode(400)
                 .time(lessThan(3000L))
