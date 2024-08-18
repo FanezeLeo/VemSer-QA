@@ -15,7 +15,7 @@ public class ProdutosGetTest {
     @Test
     public void testListarTodosProdutosComSucesso() {
         produtoClient.getProdutos()
-            .then()
+        .then()
                 .log().all()
                 .statusCode(200)
                 .body(matchesJsonSchemaInClasspath("schema/produtos/listar_todos_produtos.json"))
@@ -51,7 +51,7 @@ public class ProdutosGetTest {
         String id = "invalido";
 
         produtoClient.getProduto(id)
-            .then()
+        .then()
                 .log().all()
                 .statusCode(400)
                 .body("message", equalTo("Produto não encontrado"))

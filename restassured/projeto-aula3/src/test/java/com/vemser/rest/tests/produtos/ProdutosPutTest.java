@@ -17,10 +17,10 @@ public class ProdutosPutTest {
         String id = ProdutosDataFactory.criarProduto();
         ProdutosModel produto = ProdutosDataFactory.produtoValido();
         produtoClient.editarProduto(produto, id)
-                .then()
-                        .log().all()
-                        .statusCode(200)
-                        .body("message", equalTo("Registro alterado com sucesso"));
+        .then()
+                .log().all()
+                .statusCode(200)
+                .body("message", equalTo("Registro alterado com sucesso"));
 
         produtoClient.excluirProduto(id);
     }
@@ -64,7 +64,7 @@ public class ProdutosPutTest {
         ProdutosModel produto = ProdutosDataFactory.produtoComNomeEmBranco();
 
         produtoClient.editarProduto(produto, id)
-                .then()
+        .then()
                 .log().all()
                 .statusCode(400)
                 .body("nome", equalTo("nome não pode ficar em branco"));

@@ -33,7 +33,7 @@ public class ProdutosPostTest {
     public void testCadastrarProdutoComNomeJaUtilizado() {
         ProdutosModel produto = ProdutosDataFactory.produtoComNomeExistente();
         produtoClient.cadastrarProdutos(produto)
-            .then()
+        .then()
                 .log().all()
                 .statusCode(400)
                 .body("message", equalTo("Já existe produto com esse nome"));
@@ -43,7 +43,7 @@ public class ProdutosPostTest {
     public void testCadastrarProdutoComNomeEmBranco() {
         ProdutosModel produto = ProdutosDataFactory.produtoComNomeEmBranco();
         produtoClient.cadastrarProdutos(produto)
-                .then()
+        .then()
                 .log().all()
                 .statusCode(400)
                 .body("nome", equalTo("nome não pode ficar em branco"));

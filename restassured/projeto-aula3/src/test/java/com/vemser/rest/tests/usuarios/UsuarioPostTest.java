@@ -17,7 +17,7 @@ public class UsuarioPostTest {
 
         String idDelete =
                 usuarioClient.cadastrarUsuarios(usuario)
-                    .then()
+                .then()
                         .log().all()
                         .statusCode(201)
                         .time(lessThan(3000L))
@@ -38,11 +38,11 @@ public class UsuarioPostTest {
         UsuariosModel usuario = UsuariosDataFactory.usuarioComEmailExistente();
 
         usuarioClient.cadastrarUsuarios(usuario)
-                .then()
-                    .log().all()
-                    .statusCode(400)
-                    .time(lessThan(3000L))
-                    .body("message", equalTo( "Este email já está sendo usado"))
+        .then()
+                .log().all()
+                .statusCode(400)
+                .time(lessThan(3000L))
+                .body("message", equalTo( "Este email já está sendo usado"))
 
 
 
