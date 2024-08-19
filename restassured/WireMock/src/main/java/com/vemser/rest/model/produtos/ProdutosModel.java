@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProdutosModel {
     private String nome;
-    private Integer preco;
+    private int preco;
     private String descricao;
-    private Integer quantidade;
+    private int quantidade;
 }

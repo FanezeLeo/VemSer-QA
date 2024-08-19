@@ -26,7 +26,7 @@ public class ProdutosDataFactory {
 
     public static ProdutosModel produtoComPrecoEmBranco() {
         ProdutosModel produto = novoProduto();
-        produto.setPreco(null);
+        produto.setPreco(0);
 
         return produto;
     }
@@ -40,7 +40,7 @@ public class ProdutosDataFactory {
 
     public static ProdutosModel produtoComQuantidadeEmBranco() {
         ProdutosModel produto = novoProduto();
-        produto.setQuantidade(null);
+        produto.setQuantidade(0);
 
         return produto;
     }

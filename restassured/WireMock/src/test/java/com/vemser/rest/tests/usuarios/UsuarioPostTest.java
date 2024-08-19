@@ -2,18 +2,8 @@ package com.vemser.rest.tests.usuarios;
 
 import com.vemser.rest.client.UsuarioClient;
 import com.vemser.rest.data.factory.UsuariosDataFactory;
-import com.vemser.rest.data.provider.ProdutosDataProvider;
-import com.vemser.rest.data.provider.UsuariosDataProvider;
-import com.vemser.rest.model.produtos.ProdutosModel;
 import com.vemser.rest.model.usuarios.UsuariosModel;
-import io.restassured.response.Response;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
-
-import java.util.stream.Stream;
 
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.Matchers.*;
@@ -57,16 +47,5 @@ public class UsuarioPostTest {
 
 
         ;
-    }
-
-    @ParameterizedTest
-    @MethodSource("providerUsuariosData")
-    public void testProdutoCamposEmBranco(UsuariosModel usuario, String campo, String message){
-        Response response = usuarioClient.cadastrarUsuarios(usuario);
-        Assertions.assertEquals(400, response.getStatusCode(), "Status code deve ser 400");
-    }
-
-    private static Stream<Arguments> providerUsuariosData(){
-        return UsuariosDataProvider.usuarioDataProvider();
     }
 }

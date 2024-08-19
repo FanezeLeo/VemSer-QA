@@ -1,4 +1,4 @@
-package com.vemser.rest.model.produtos;
+package com.vemser.rest.model.usuarios;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProdutosModel {
+public class UsuariosModel {
     private String nome;
-    private Integer preco;
-    private String descricao;
-    private Integer quantidade;
+    private String email;
+    private String password;
+    private String administrador;
 }
