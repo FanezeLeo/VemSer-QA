@@ -11,7 +11,7 @@ import static org.hamcrest.Matchers.*;
 
 public class ProdutosPutTest {
     private final ProdutoClient produtoClient = new ProdutoClient();
-    private M
+
     @Test
     public void testAtualizarProdutosComSucesso() {
 

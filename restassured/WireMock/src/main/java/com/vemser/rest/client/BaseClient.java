@@ -8,7 +8,7 @@ import io.restassured.specification.RequestSpecification;
 public abstract class BaseClient {
 
     public RequestSpecification set() {
-        String BASEURL = "http://localhost:3000";
+        String BASEURL = "http://localhost:8080";
         return new RequestSpecBuilder()
                 .setBaseUri(BASEURL)
                 .setConfig(RestAssuredConfig.config().logConfig(

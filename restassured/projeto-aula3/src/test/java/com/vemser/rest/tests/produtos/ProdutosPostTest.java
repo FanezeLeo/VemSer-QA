@@ -14,6 +14,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.Stream;
 
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
+import static io.restassured.path.json.JsonPath.from;
 import static org.hamcrest.Matchers.*;
 
 public class ProdutosPostTest {
@@ -61,7 +62,10 @@ public class ProdutosPostTest {
     @MethodSource("providerProdutosData")
     public void testProdutoCamposEmBranco(ProdutosModel produtos, String campo, String message){
         Response response = produtoClient.cadastrarProdutos(produtos);
-        Assertions.assertEquals(400, response.getStatusCode(), "Status code deve ser 400");
+
+        String responseBody = response.getBody().asString();
+        String mensagemErro = from(responseBody).getString(campo);
+                Assertions.assertEquals(mensagemErro, message, "A mensagem deveria ser: " + message);
     }
 
     private static Stream<Arguments> providerProdutosData(){

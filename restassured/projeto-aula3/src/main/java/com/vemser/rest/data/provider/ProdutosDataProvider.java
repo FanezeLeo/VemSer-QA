@@ -10,11 +10,11 @@ public class ProdutosDataProvider {
     private static final String KEY_NOME = "nome";
     private static final String VALUE_NOME_EM_BRANCO = "nome não pode ficar em branco";
     private static final String KEY_PRECO = "preco";
-    private static final String VALUE_PRECO_EM_BRANCO = "preco não pode ficar em branco";
+    private static final String VALUE_PRECO_EM_BRANCO = "preco deve ser um número";
     private static final String KEY_DESCRICAO = "descricao";
     private static final String VALUE_DESCRICAO_EM_BRANCO = "descricao não pode ficar em branco";
     private static final String KEY_QUANTIDADE = "quantidade";
-    private static final String VALUE_QUANTIDADE_EM_BRANCO = "quantidade deve ser 'true' ou 'false'";
+    private static final String VALUE_QUANTIDADE_EM_BRANCO = "quantidade deve ser um número";
 
     public static Stream<Arguments> produtosDataProvider() {
         return Stream.of(

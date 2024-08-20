@@ -23,6 +23,19 @@ public class ProdutoClient extends BaseClient{
         return LoginDataFactory.auth(email, password);
     }
 
+    public Response cadastrarProdutos(ProdutosModel produto, String auth) {
+//        String auth = auth();
+        return
+                given()
+                        .spec(super.set())
+                        .header("Authorization", auth)
+                        .contentType(ContentType.JSON)
+                        .body(produto)
+                .when()
+                        .post(PRODUTOS);
+
+    }
+
     public Response cadastrarProdutos(ProdutosModel produto) {
         String auth = auth();
         return
@@ -31,7 +44,7 @@ public class ProdutoClient extends BaseClient{
                         .header("Authorization", auth)
                         .contentType(ContentType.JSON)
                         .body(produto)
-                .when()
+                        .when()
                         .post(PRODUTOS);
 
     }
