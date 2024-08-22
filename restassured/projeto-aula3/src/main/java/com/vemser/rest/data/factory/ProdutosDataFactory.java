@@ -75,6 +75,14 @@ public class ProdutosDataFactory {
                         .path("produtos[0]._id");
     }
 
+    public static String idExistenteDelete() {
+        return
+                produtosClient.getProdutos()
+                        .then()
+                        .extract()
+                        .path("produtos[1]._id");
+    }
+
     public static String descricaoExistente() {
         return
                 produtosClient.getProdutos()

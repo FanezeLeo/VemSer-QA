@@ -5,8 +5,7 @@ import io.restassured.config.LogConfig;
 import io.restassured.config.RestAssuredConfig;
 import io.restassured.specification.RequestSpecification;
 
-public abstract class BaseClient {
-
+public class BaseWireMockClient {
     public RequestSpecification set() {
         String BASEURL = "http://localhost:8080";
         return new RequestSpecBuilder()
@@ -16,5 +15,4 @@ public abstract class BaseClient {
                 ))
                 .build();
     }
-
 }

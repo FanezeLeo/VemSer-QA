@@ -12,7 +12,7 @@ public class ProdutosDeleteTest {
     @Test
     public void testExcluirProdutosComSucesso() {
 
-        String id = ProdutosDataFactory.idExistente();
+        String id = ProdutosDataFactory.idExistenteDelete();
 
                 produtoClient.excluirProduto(id)
                 .then()

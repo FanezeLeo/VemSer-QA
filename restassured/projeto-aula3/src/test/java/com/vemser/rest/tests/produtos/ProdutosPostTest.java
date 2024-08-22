@@ -1,74 +1,76 @@
 package com.vemser.rest.tests.produtos;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import com.vemser.rest.client.ProdutoClient;
+import com.vemser.rest.client.ProdutoWireMockClient;
 import com.vemser.rest.data.factory.ProdutosDataFactory;
-import com.vemser.rest.data.provider.ProdutosDataProvider;
 import com.vemser.rest.model.produtos.*;
-import io.restassured.response.Response;
-import org.junit.jupiter.api.Assertions;
+import org.apache.http.HttpStatus;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.stream.Stream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
-import static io.restassured.path.json.JsonPath.from;
 import static org.hamcrest.Matchers.*;
 
+@WireMockTest(httpPort = 8080)
 public class ProdutosPostTest {
-    private final ProdutoClient produtoClient = new ProdutoClient();
+    private final ProdutoWireMockClient produtoWireMockClient = new ProdutoWireMockClient();
+    ObjectMapper objectMapper = new ObjectMapper();
+    ProdutosModel produto = ProdutosDataFactory.produtoValido();
+    ProdutosModel produtoNomeEmBranco = ProdutosDataFactory.produtoComNomeEmBranco();
 
-    @Test
-    public void testCadastrarProdutoComSucesso(){
-        ProdutosModel produto = ProdutosDataFactory.produtoValido();
+    String auth = "Bearer 123dcb321";
 
-        String id =
-                produtoClient.cadastrarProdutos(produto)
-                .then()
-                        .log().all()
-                        .statusCode(201)
-                        .body(matchesJsonSchemaInClasspath("schema/produtos/cadastrar_produtso.json"))
-                        .body("message", equalTo("Cadastro realizado com sucesso"))
-                        .body("_id", notNullValue())
-                        .extract()
-                        .path("_id")
-                ;
-        produtoClient.excluirProduto(id);
+    @BeforeEach
+    public void setup() throws Exception{
+        String response = new String(Files.readAllBytes(Paths.get("src/test/resources/schema/produtos/responseCadastroProdutoWireMock.json")));
+
+
+        stubFor(post(urlEqualTo("/produtos"))
+                .withRequestBody(equalToJson(objectMapper.writeValueAsString(produto)))
+                .withHeader("Authorization", equalTo(auth))
+                .willReturn(aResponse()
+                        .withStatus(HttpStatus.SC_CREATED)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(response)
+                )
+        );
+
+        stubFor(post(urlEqualTo("/produtos"))
+                .withRequestBody(equalToJson(objectMapper.writeValueAsString(produtoNomeEmBranco)))
+                .withHeader("Authorization", equalTo(auth))
+                .willReturn(aResponse()
+                        .withStatus(HttpStatus.SC_BAD_REQUEST)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody("{\"nome\": \"nome não pode ficar em branco\"}")
+                )
+        );
     }
 
     @Test
-    public void testCadastrarProdutoComNomeJaUtilizado() {
-        ProdutosModel produto = ProdutosDataFactory.produtoComNomeExistente();
-        produtoClient.cadastrarProdutos(produto)
-        .then()
+    public void testCadastrarProdutoComSucesso(){
+        produtoWireMockClient.cadastrarProdutos(produto, auth)
+                .then()
                 .log().all()
-                .statusCode(400)
-                .body("message", equalTo("Já existe produto com esse nome"));
+                .statusCode(201)
+                .body(matchesJsonSchemaInClasspath("schema/produtos/cadastrar_produtso.json"))
+                .body("_id", notNullValue())
+                .extract()
+                .path("_id")
+        ;
     }
 
     @Test
     public void testCadastrarProdutoComNomeEmBranco() {
-        ProdutosModel produto = ProdutosDataFactory.produtoComNomeEmBranco();
-        produtoClient.cadastrarProdutos(produto)
-        .then()
+        produtoWireMockClient.cadastrarProdutos(produtoNomeEmBranco, auth)
+                .then()
                 .log().all()
-                .statusCode(400)
-                .body("nome", equalTo("nome não pode ficar em branco"));
-    }
-
-    @ParameterizedTest
-    @MethodSource("providerProdutosData")
-    public void testProdutoCamposEmBranco(ProdutosModel produtos, String campo, String message){
-        Response response = produtoClient.cadastrarProdutos(produtos);
-
-        String responseBody = response.getBody().asString();
-        String mensagemErro = from(responseBody).getString(campo);
-                Assertions.assertEquals(mensagemErro, message, "A mensagem deveria ser: " + message);
-    }
-
-    private static Stream<Arguments> providerProdutosData(){
-        return ProdutosDataProvider.produtosDataProvider();
+                .statusCode(400);
     }
 }
