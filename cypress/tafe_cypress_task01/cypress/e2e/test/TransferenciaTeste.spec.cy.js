@@ -32,7 +32,7 @@ describe('transferencia', () =>{
         registroPage.fazerRegistroComSaldoComSucesso(dadosRegistro)
         registroPage.clicarBtnFecharAvisoSucesso()
         loginPage.fazerLoginComSucesso(dadosRegistro)
-        const codigo = transferenciaPage.retornaCodigo() + ""
+        const codigo = transferenciaPage.retornaCodigo()
         loginPage.clicarBtnSair()
         registroPage.clicarBtnRegistrar()
         registroPage.fazerRegistroComSaldoComSucesso(dadosRegistro2)
